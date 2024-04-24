@@ -6,7 +6,7 @@
 
     <h1>Home </h1>
 
-
+<div class="background-image"></div>
 <?php
 include("footer.php");
 ?>
