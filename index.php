@@ -4,9 +4,8 @@
     include("navbar.php");
     ?>
 
-    <h1>Home </h1>
-
-<div class="background-image"></div>
+<div class="background-image" id=""></div>
 <?php
 include("footer.php");
 ?>
+

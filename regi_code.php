@@ -1,7 +1,20 @@
 <?php
+
+
 session_start();
 include("db_connect.php");
+include("db_connect.php");
 
+if (isset($_POST["registerbtn"])) {
+    // Your registration logic here
+
+    // Assuming registration is successful
+    // Show success message
+    $_SESSION['registration_status'] = "Registration Successful! You can now log in.";
+
+    header("Location: login.php");
+    exit(0);
+}
 
 if(isset($_POST["register"])){
     $fname = trim($_POST['fname']);
@@ -86,7 +99,7 @@ if(isset($_POST["register"])){
                    
                         $_SESSION['status'] = "Registration successful!";
                    
-                    header("Location: register.php");
+                    header("Location: login.php");
                     exit(0);
                 } else {
                     $_SESSION['status'] = "Registration failed";
