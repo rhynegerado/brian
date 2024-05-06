@@ -1,3 +1,3 @@
 </body>
-MEMBERS: LUCEÑARA, BALANDRA, ANTECRISTO, CABATUAN
+
 </html>

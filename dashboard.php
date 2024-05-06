@@ -2,8 +2,6 @@
 // Start session
 session_start();
 
-
-
 // Check if user is authenticated, if not, redirect to login page
 if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== TRUE) {
     header("Location: login.php");
@@ -15,7 +13,7 @@ include("db_connect.php");
 
 // Fetch user data for the sidebar
 $user_email = $_SESSION['auth_user']['email'];
-// You can fetch additional user data here if needed
+
 
 // Check if logout button is clicked
 if (isset($_POST['logout'])) {
@@ -23,7 +21,7 @@ if (isset($_POST['logout'])) {
     session_unset();
     session_destroy();
     // Redirect to login page
-    header("Location: login.php");
+    header("Location: index.php");
     exit();
 }
 ?>
@@ -34,25 +32,25 @@ if (isset($_POST['logout'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Include Font Awesome CSS -->
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/main.min.css' rel='stylesheet' /> <!-- FullCalendar CSS -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/main.min.js'></script> <!-- FullCalendar JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script> <!-- Chart.js -->
     <style>
-
-        
         /* Your CSS styles for the dashboard */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-image: url('images/bgbg.jpg'); /* Add background image */
-            background-size: cover;
-            background-position: center;
+            background-color: #3498db; /* Blue background color */
         }
         .sidebar {
             height: 100%;
-            width: 250px;
+            width: 80px; /* sidebar width */
             position: fixed;
             top: 0;
             left: 0;
-            background-color: rgba(0, 0, 0, 0.5); /* Add background color with transparency */
+            background-color: rgba(0, 0, 0, 0.5); /* Background color with transparency */
             padding-top: 20px;
         }
         .sidebar ul {
@@ -63,33 +61,64 @@ if (isset($_POST['logout'])) {
             padding: 10px;
             text-align: center;
         }
-        .sidebar ul li a {
+        .sidebar ul li i {
             color: white;
-            text-decoration: none;
+            font-size: 24px; /* Icon size */
+            cursor: pointer; /* Cursor for clickable icons */
         }
         .content {
-            margin-left: 250px;
+            display: flex; /* Use flexbox to arrange columns */
             padding: 20px;
+            margin-left: 80px; /* Adjusted margin to accommodate sidebar width */
+        }
+        .column1 {
+            flex: 2; /* Larger width for the first column */
+            padding-right: 20px;
+        }
+        .column2 {
+            flex: 1; /* Smaller width for the second column */
+            background-color: #ffffff; /* White background color */
+            padding: 20px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
         }
         .content h2 {
             margin-top: 0;
-            color: white; /* Change text color to white for better readability */
+            color: white; /* Text color to white */
+            display: flex;
+            align-items: center; /* Icon and text vertically aligned */
+        }
+        .activity-icon {
+            margin-right: 10px; /* Space between icon and text */
+        }
+        .icon-container {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .icon-container a {
+            color: black;
+            text-decoration: none;
         }
     </style>
-
 </head>
 <body>
+    
     <!-- Sidebar -->
     <div class="sidebar">
-        <h2>Dashboard</h2>
         <ul>
-        <li><a href="">Pending</a></li> 
-        <li><a href="">Pending</a></li> 
-            <li><a href="#">User Info</a></li> <!--to be coded soon-->
+            <li><i class="fas fa-tasks" id="pending"></i></li>
+            <li><i class="fas fa-user" id="user-info"></i></li>
             <!-- Logout button -->
             <li>
-                <form method="post">
-                    <button type="submit" name="logout">Logout</button>
+                <form id="logout-form" method="post">
+                    <button type="submit" name="logout" style="background: none; border: none; cursor: pointer;">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
                 </form>
             </li>
         </ul>
@@ -97,11 +126,61 @@ if (isset($_POST['logout'])) {
 
     <!-- Page content -->
     <div class="dashboard-content">
-    <div class="content">
-        <h2>Pasok! AYOS KAAYO ka user <?php echo $user_email;?></h2>
-        <p>Welome bai, salamat kaayo sa pag login.
-            Moral lesson: Kaon og tarong, ayaw pagutom, alagai imong kaugalingon, and mag pray everyday.
-        </p>
+        <div class="content">
+            <div class="column1">
+                <h2><i class="fas fa-chart-line activity-icon"></i></h2> 
+                <h1> DASHBOARD </h1>
+                <p>RECENT ACTIVITIES</p>
+            </div>
+            <div class="column2">
+                <!-- White box -->
+                <div class="white-box">
+                    <!-- Chart will be rendered here -->
+                    <canvas id="randomChart" width="400" height="400"></canvas>
+                </div>
+                <!-- Icon container -->
+                <div class="icon-container">
+                    <a href="statistics.php"><i class="fas fa-chart-bar"></i></a>
+                    <a href="time.php"><i class="fas fa-clock"></i></a>
+                    <a href="activity.php"><i class="fas fa-briefcase"></i></a>
+                    <a href="profile.php"><i class="fas fa-user"></i></a>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script>
+        // Generate a random array of data for the chart
+        function generateRandomData() {
+            let data = [];
+            for (let i = 0; i < 7; i++) {
+                data.push(Math.floor(Math.random() * 100));
+            }
+            return data;
+        }
+
+        // Create a random chart
+        var ctx = document.getElementById('randomChart').getContext('2d');
+        var randomChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                datasets: [{
+                    label: 'Random Data',
+                    data: generateRandomData(),
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)', // Red background color
+                    borderColor: 'rgba(255, 99, 132, 1)', // Red border color
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>
