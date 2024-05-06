@@ -74,6 +74,7 @@ if (isset($_POST['logout'])) {
         .column1 {
             flex: 2; /* Larger width for the first column */
             padding-right: 20px;
+            color: white;
         }
         .column2 {
             flex: 1; /* Smaller width for the second column */
@@ -104,6 +105,13 @@ if (isset($_POST['logout'])) {
             color: black;
             text-decoration: none;
         }
+        .notification-container {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -128,9 +136,27 @@ if (isset($_POST['logout'])) {
     <div class="dashboard-content">
         <div class="content">
             <div class="column1">
-                <h2><i class="fas fa-chart-line activity-icon"></i></h2> 
                 <h1> DASHBOARD </h1>
-                <p>RECENT ACTIVITIES</p>
+                <<i class="fas fa-chart-line activity-icon"></i> RECENT ACTIVITIES
+                <div style="padding-top: 10px;"> <!-- Adjust padding as needed -->
+                    <?php
+                    // Array of random notifications
+                    $notifications = [
+                        "New message from client A",
+                        "Project deadline approaching",
+                        "Team meeting scheduled",
+                        "Task assigned by manager",
+                        "Server maintenance notice",
+                        "Upcoming holiday reminder",
+                        "Project status update"
+                    ];
+
+                    // Display up to 5 random notifications
+                    foreach ($notifications as $notification) {
+                        echo '<div class="notification-container">' . $notification . '</div>';
+                    }
+                    ?>
+                </div>
             </div>
             <div class="column2">
                 <!-- White box -->
