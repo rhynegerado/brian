@@ -18,10 +18,10 @@ $user_email = $_SESSION['auth_user']['email'];
 // Check if logout button is clicked
 if (isset($_POST['logout'])) {
     // Destroy session
-    session_unset();
+    session_unset();    
     session_destroy();
     // Redirect to login page
-    header("Location: index.php");
+    header("Location: index.php"); // home ang location depende sa inyo
     exit();
 }
 ?>
