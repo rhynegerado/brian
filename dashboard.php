@@ -137,17 +137,17 @@ if (isset($_POST['logout'])) {
         <div class="content">
             <div class="column1">
                 <h1> DASHBOARD </h1>
-                <<i class="fas fa-chart-line activity-icon"></i> RECENT ACTIVITIES
+                <<i class="fas fa-chart-line activity-icon"></i> ACTIVITIES
                 <div style="padding-top: 10px;"> <!-- Adjust padding as needed -->
                     <?php
                     // Array of random notifications
                     $notifications = [
                         "New message from client A",
-                        "Project deadline approaching",
-                        "Team meeting scheduled",
+                        "Project",
+                        "Team meeting",
                         "Task assigned by manager",
-                        "Server maintenance notice",
-                        "Upcoming holiday reminder",
+                        "Server maintenance",
+                        "Holiday ",
                         "Project status update"
                     ];
 
@@ -192,7 +192,7 @@ if (isset($_POST['logout'])) {
             data: {
                 labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
                 datasets: [{
-                    label: 'Random Data',
+                    label: 'Users',
                     data: generateRandomData(),
                     backgroundColor: 'rgba(255, 99, 132, 0.2)', // Red background color
                     borderColor: 'rgba(255, 99, 132, 1)', // Red border color
